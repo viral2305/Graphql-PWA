@@ -13,30 +13,44 @@ const resolvers ={
 
       return user
     },
-    user: async (_,{id},context) => {
-
-      console.log('id',id)
-      if (!context.user) throw new AuthenticationError('you must be logged in','401');
-      return context.dataSources.User.find({_id:id})
+    user: async (_,{},context) => {
+      if (!context.user) throw new AuthenticationError('you must be logged in');
+      const userProfile = await context.dataSources.Admin.findOne({email:context.user})
+      return userProfile
     }
   },
 
   Mutation: {
-    CreateUser:async  (_,{newData},context) => {
-      const user = await context.dataSources.User.findOne({email: newData.email});
+    CreateUser: async  (_,{newData},context) => {
+      const user = await context.dataSources.Admin.findOne({email: newData.email});
       console.log('user',user)
       if (user) {
-        throw new Error("Admin already exists.")
-      }else
-      {
-        const newUser = new context.dataSources.Admin({
+        throw new Error("This UserEmail is already exists.")
+      }else {
+        const newAdmin = new context.dataSources.Admin({
           ...newData, token: await jwt.sign(newData.email, '@1@Viral@1@')
         });
-        newUser.save();
-        return newUser;
+        newAdmin.save();
+        return newAdmin;
       }
+    },
+    LoginUser: async (_,{newData},context) => {
+      const userFound = await context.dataSources.Admin.find({$and:[{email:newData.email},{password:newData.password}]})
+
+      if(userFound && userFound.length){
+        return userFound[0]
+      }else{
+        throw new Error('Invalid Email or Password')
+      }
+    },
+    UpdateUser: async (_,{newData},context) => {
+      const newuser = await context.dataSources.Admin.findOneAndUpdate({email: context.user },{...newData},{
+        new: true
+      })
+      return newuser
     }
   }
+
 };
 
 module.exports = resolvers

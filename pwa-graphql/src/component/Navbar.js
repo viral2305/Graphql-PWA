@@ -3,6 +3,15 @@ import {Link} from "react-router-dom";
 
 export default function Navbar() {
   const [menuOpen,setMenuOpen] = useState(false)
+
+  const logOut = (key) => {
+    if(key === 2){
+    setMenuOpen(!menuOpen)
+    localStorage.clear()
+    }else{
+      localStorage.clear()
+    }
+  }
   return(
     <>
     <div className='w-full bg-green-200 h-14 flex items-center justify-between'>
@@ -12,7 +21,7 @@ export default function Navbar() {
           <li className='list-item mx-5 px-2.5 py-2 cursor-pointer'><Link to='/'>Home</Link></li>
           <li className='list-item mx-5 px-2.5 py-2 cursor-pointer'><Link to='/profile'>Profile</Link></li>
           <li className='list-item mx-5 px-2.5 py-2 cursor-pointer'>View</li>
-          <li className=' logout-button mx-5 px-2.5 py-2 cursor-pointer'><button><Link to='/login'>LogOut</Link></button></li>
+          <li className=' logout-button mx-5 px-2.5 py-2 cursor-pointer' onClick={() => logOut(1)}><button><Link to='/login'>LogOut</Link></button></li>
         </ul>
         <button className="rounded-3xl text-green-200 mx-5 shadow-none p-2 bg-green-800  text-lg rounded-full ring-1 ring-green-800 cursor-pointer">
           <svg
@@ -46,7 +55,7 @@ export default function Navbar() {
         <li className='list-item mx-5 my-1 px-2.5 py-2' onClick={() => setMenuOpen(!menuOpen)}><Link to='/'>Home</Link></li>
         <li className='list-item mx-5 my-1 px-2.5 py-2' onClick={() => setMenuOpen(!menuOpen)}><Link to='/profile'>Profile</Link></li>
         <li className='list-item mx-5 my-1 px-2.5 py-2' onClick={() => setMenuOpen(!menuOpen)}>View</li>
-        <li className=' logout-button mx-5 my-1 px-2.5 py-2' onClick={() => setMenuOpen(!menuOpen)}><button><Link to='/login'>LogOut</Link></button></li>
+        <li className=' logout-button mx-5 my-1 px-2.5 py-2' onClick={() => logOut(2)}><button><Link to='/login'>LogOut</Link></button></li>
       </ul>
     </div>
   </>

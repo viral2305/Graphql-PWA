@@ -32,7 +32,15 @@ const AdminSchema = new mongoose.Schema({
   token: {
     type: String,
     required: true
-  }
+  },
+  name: {
+    type: String,
+    required: false
+  },
+  mobile: {
+    type: Number,
+    required: false
+  },
 })
 const User=mongoose.model("User",userSchema);
 const Admin =mongoose.model("Admin",AdminSchema);

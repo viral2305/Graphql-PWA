@@ -35,7 +35,8 @@ export default function SignUp() {
         navigate('/')
         console.log("res",res)
       }).catch((error) => {
-        console.log("error",error)
+        // console.log('error',error.message)
+        setErrorFlag(error.message)
       })
 
 

@@ -1,35 +1,37 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 
-export default function InputField({inputLabel, inputType,fieldName,openEdit,closeInput,open,inputKey,value,valueChange}) {
-  const [changeValue, setChangeValue] = useState(false);
+export default function InputField({inputLabel, inputType,fieldName,openEdit,closeInput,open,Key,value,valueChange,saveBtn}) {
+  const [changeValue, setChangeValue] = useState('');
   const [passwordVisible, setPasswordVisible] = useState(false);
   const [fieldValue, setFieldValue] = useState({});
 
-
-  const handleOpenEdit = (inputKey) => {
-    openEdit(inputKey)
+  const handleOpenEdit = (Key) => {
+    openEdit(Key)
   }
+
   const handleCloseInput = () => {
-    setChangeValue('')
+    // setChangeValue('')
     closeInput()
   }
+
   const handleInputChange = (e) => {
-    setChangeValue(e.target.value)
+    valueChange(e.target.name , e.target.value)
     setFieldValue({[e.target.name]: e.target.value})
   }
 
-  const saveBtn = () => {
-    valueChange(fieldValue)
+  const saveProfile = () => {
+    saveBtn(fieldValue)
   }
+
   const PasswordIndicator = () => setPasswordVisible(!passwordVisible)
 
   return (
     <details className=' bg-green-200 p-2 rounded-lg m-6' open={open}
              onClick={(e) => e.preventDefault()}>
       <summary className='flex justify-between item-center '>
-        <p className='text-2xl font-semibold text-green-800 capitalize'>{fieldName}:<span className='ml-4 text-green-600 text-xl '>{changeValue == '' ? value : changeValue}</span></p>
+        <p className='text-2xl font-semibold text-green-800 capitalize'>{fieldName}:<span className='ml-4 text-green-600 text-xl '>{value}</span></p>
         <svg className="h-7 w-7 fill-green-800" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"
-             onClick={() => handleOpenEdit(inputKey)}>
+             onClick={() => handleOpenEdit(Key)}>
           <path
             d="M490.3 40.4C512.2 62.27 512.2 97.73 490.3 119.6L460.3 149.7L362.3 51.72L392.4 21.66C414.3-.2135 449.7-.2135 471.6 21.66L490.3 40.4zM172.4 241.7L339.7 74.34L437.7 172.3L270.3 339.6C264.2 345.8 256.7 350.4 248.4 353.2L159.6 382.8C150.1 385.6 141.5 383.4 135 376.1C128.6 370.5 126.4 361 129.2 352.4L158.8 263.6C161.6 255.3 166.2 247.8 172.4 241.7V241.7zM192 63.1C209.7 63.1 224 78.33 224 95.1C224 113.7 209.7 127.1 192 127.1H96C78.33 127.1 64 142.3 64 159.1V416C64 433.7 78.33 448 96 448H352C369.7 448 384 433.7 384 416V319.1C384 302.3 398.3 287.1 416 287.1C433.7 287.1 448 302.3 448 319.1V416C448 469 405 512 352 512H96C42.98 512 0 469 0 416V159.1C0 106.1 42.98 63.1 96 63.1H192z"/>
         </svg>
@@ -37,7 +39,7 @@ export default function InputField({inputLabel, inputType,fieldName,openEdit,clo
       <div className='flex mt-4 h-10 justify-between'>
         <div className='flex items-center border-1 py-2 px-3 rounded-lg bg-white w-1/2'>
           <input className="bg-transparent outline-none pl-2 w-full mr-2.5 rounded border-none" type={inputType != 'password' ? inputType : (passwordVisible ? 'text': 'password')} name={fieldName} id="first-name"
-                 placeholder={inputLabel} onChange={handleInputChange}/>
+                 placeholder={inputLabel} onChange={handleInputChange} value={value}/>
           {inputType == 'password' &&
           <div>
             {!passwordVisible ? <svg className="h-5 w-5 fill-gray-400" onClick={PasswordIndicator}
@@ -55,10 +57,10 @@ export default function InputField({inputLabel, inputType,fieldName,openEdit,clo
           }
         </div>
         <div className='flex'>
-          <button type="button" onClick={handleCloseInput}
+          <button type="button" onClick={() => handleCloseInput()}
                   className="block px-8 rounded bg-green-600  hover:bg-green-800 text-white font-semibold ">Cancel
           </button>
-          <button type="button" onClick={() => saveBtn()}
+          <button type="button" onClick={saveProfile}
                   className="block ml-2.5 px-8 rounded  bg-green-600  hover:bg-green-800 text-white font-semibold ">Save
           </button>
         </div>

@@ -1,11 +1,14 @@
 import React, {useState} from "react";
 import {Link, useNavigate} from "react-router-dom";
+import {useMutation} from "@apollo/client";
+import {LOGIN_USER} from "../Graph-ql/mutation";
 
 
 export default function LogIn() {
   const [userData,setUserData] = useState({email: '', password: ''});
   const [passwordVisible, setPasswordVisible] = useState(false);
   const [errorFlag,setErrorFlag] = useState('');
+  const [Login,{loading,error,data}] = useMutation(LOGIN_USER)
   const navigate = useNavigate();
 
 
@@ -16,7 +19,7 @@ export default function LogIn() {
 
   };
 
-  const handelSubmit = () => {
+  const handelSubmit = async () => {
     if(userData.email == '' && userData.password == ''){
       setErrorFlag('*All Field are Mandatory!')
     }else if(userData.email == ''){
@@ -25,8 +28,14 @@ export default function LogIn() {
       setErrorFlag('*Password Field is Required!')
     }else{
       setErrorFlag('');
-      console.log('save');
-      navigate('/')
+      await Login({variables : {newData: userData}}).then((res) => {
+        localStorage.setItem("token",res.data.LoginUser.token)
+        navigate('/')
+        console.log("res",res)
+      }).catch((error) => {
+        console.log('error',error.message)
+        setErrorFlag(error.message)
+      })
 
     }
   };

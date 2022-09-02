@@ -8,6 +8,8 @@ import {
   InMemoryCache,
   ApolloProvider,
 } from "@apollo/client";
+import ServiceWorker from './service-worker'
+import Splash from "./component/Splash";
 
 
 const client = new ApolloClient({
@@ -20,12 +22,15 @@ const client = new ApolloClient({
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
-  <React.StrictMode>
+  <>
     <ApolloProvider client={client}>
       <App />
+      {/*<Splash/>*/}
     </ApolloProvider>
-  </React.StrictMode>
+  </>
 );
+
+ServiceWorker()
 
 // If you want to start measuring performance in your app, pass a function
 // to log results (for example: reportWebVitals(console.log))
