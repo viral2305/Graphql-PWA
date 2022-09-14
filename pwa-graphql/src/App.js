@@ -10,8 +10,8 @@ import NoMatch from "./pages/Error";
 
 
 
-function App() {
-
+function App(props) {
+  console.log('props', props)
   function PrivateRoute({ children }) {
     const token = localStorage.getItem('token')
 

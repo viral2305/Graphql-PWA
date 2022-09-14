@@ -20,16 +20,26 @@ export default function InputField({inputLabel, inputType,fieldName,openEdit,clo
   }
 
   const saveProfile = () => {
-    saveBtn(fieldValue)
+    saveBtn(fieldValue,Key)
   }
 
   const PasswordIndicator = () => setPasswordVisible(!passwordVisible)
+
+  const maskInput = (value) => {
+    const maskStringLength = value.length;
+    var maskString = ''
+    for(let i = 0; i <= maskStringLength - 4; i++){
+       maskString += "*"
+    }
+    maskString += value.slice(maskStringLength - 3 , maskStringLength)
+    return maskString
+  }
 
   return (
     <details className=' bg-green-200 p-2 rounded-lg m-6' open={open}
              onClick={(e) => e.preventDefault()}>
       <summary className='flex justify-between item-center '>
-        <p className='text-2xl font-semibold text-green-800 capitalize'>{fieldName}:<span className='ml-4 text-green-600 text-xl '>{value}</span></p>
+        <p className='text-2xl font-semibold text-green-800 capitalize'>{fieldName}:<span className='ml-4 text-green-600 text-xl '>{inputType != 'password' ? value : maskInput(value)}</span></p>
         <svg className="h-7 w-7 fill-green-800" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"
              onClick={() => handleOpenEdit(Key)}>
           <path

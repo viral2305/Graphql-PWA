@@ -33,7 +33,6 @@ export default function SignUp() {
       await createUser({variables : {newData: userData}}).then((res) => {
         localStorage.setItem("token",res.data.CreateUser.token)
         navigate('/')
-        console.log("res",res)
       }).catch((error) => {
         // console.log('error',error.message)
         setErrorFlag(error.message)

@@ -6,6 +6,7 @@ mutation createUser($newData: CreateInput!){
     email
     password
     token
+    
   }
 }
 `

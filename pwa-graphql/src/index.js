@@ -9,24 +9,25 @@ import {
   ApolloProvider,
 } from "@apollo/client";
 import ServiceWorker from './service-worker'
-import Splash from "./component/Splash";
+import ThemeContextWrapper from './Theme/ThemeContextWrapper'
 
 
 const client = new ApolloClient({
   uri: 'http://localhost:4001/graphql',
   cache: new InMemoryCache(),
-  headers:{
-    authorization:localStorage.getItem("token") || ""
+  headers: {
+    authorization: localStorage.getItem("token") || ""
   }
 });
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <>
-    <ApolloProvider client={client}>
-      <App />
-      {/*<Splash/>*/}
-    </ApolloProvider>
+    <ThemeContextWrapper>
+      <ApolloProvider client={client}>
+        <App/>
+      </ApolloProvider>
+    </ThemeContextWrapper>
   </>
 );
 

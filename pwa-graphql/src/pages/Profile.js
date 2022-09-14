@@ -31,7 +31,7 @@ export default function Profile() {
     }
   }
   const closeInput = () => {
-    setOpen(false)
+    setOpen({'name': false,'mobile': false, 'email': false, 'password': false})
   }
 
   const valueChange = (key,value) => {
@@ -39,7 +39,7 @@ export default function Profile() {
     setUser({...user,[key]: value })
 
   }
-  const editProfile = async (value) => {
+  const editProfile = async (value,key) => {
     await updateUser({
       context: {
         headers: {
@@ -48,9 +48,8 @@ export default function Profile() {
       },
       variables: {newData: value}
     }).then((res) => {
-      setUser({'name':data.UpdateUser.name != '' && data.UpdateUser.name != null ? data.UpdateUser.name : 'Set Name','mobile': data.UpdateUser.mobile != '' && data.UpdateUser.mobile != null ? data.UpdateUser.mobile : 'Set Mobile','email': data.UpdateUser.email != '' && data.UpdateUser.email != null ? data.UpdateUser.email : 'Set Email','password': data.UpdateUser.password != '' && data.UpdateUser.password != null ? data.UpdateUser.password : 'Set Password'})
-      setOpen(false)
-      // console.log('ress',res)
+        setUser({'name':res.data.UpdateUser.name != '' && res.data.UpdateUser.name != null ? res.data.UpdateUser.name : 'Set Name','mobile': res.data.UpdateUser.mobile != '' && res.data.UpdateUser.mobile != null ? res.data.UpdateUser.mobile : 'Set Mobile','email': res.data.UpdateUser.email != '' && res.data.UpdateUser.email != null ? res.data.UpdateUser.email : 'Set Email','password': res.data.UpdateUser.password != '' && res.data.UpdateUser.password != null ? res.data.UpdateUser.password : 'Set Password'})
+        closeInput()
       }
       )
   }
