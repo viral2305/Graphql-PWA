@@ -3,9 +3,11 @@ import InputField from "../component/ProfielInputField";
 import {useMutation, useQuery} from "@apollo/client";
 import {EDIT_PROFILE} from "../Graph-ql/mutation";
 import {GET_USER_BY_TOKEN} from "../Graph-ql/queires";
+import {toast, ToastContainer} from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
 
 export default function Profile() {
-  const [user, setUser] = useState({'name': 'Set Name','mobile': 'set Mobile Number', 'email': '', 'password': ''});
+  const [user, setUser] = useState({'name': 'Set Name','mobile': 'Set Mobile Number', 'email': '', 'password': ''});
   const [open, setOpen] = useState({'name': false,'mobile': false, 'email': false, 'password': false});
   const {getProfile,loading,error,data} = useQuery(GET_USER_BY_TOKEN,{
     context: {
@@ -48,6 +50,10 @@ export default function Profile() {
       },
       variables: {newData: value}
     }).then((res) => {
+      console.log('toast')
+        toast.success("Successfully saved profile", {
+          position: toast.POSITION.TOP_CENTER
+        });
         setUser({'name':res.data.UpdateUser.name != '' && res.data.UpdateUser.name != null ? res.data.UpdateUser.name : 'Set Name','mobile': res.data.UpdateUser.mobile != '' && res.data.UpdateUser.mobile != null ? res.data.UpdateUser.mobile : 'Set Mobile','email': res.data.UpdateUser.email != '' && res.data.UpdateUser.email != null ? res.data.UpdateUser.email : 'Set Email','password': res.data.UpdateUser.password != '' && res.data.UpdateUser.password != null ? res.data.UpdateUser.password : 'Set Password'})
         closeInput()
       }
@@ -67,7 +73,7 @@ export default function Profile() {
           <InputField inputLabel='Edit your password' inputType='password' fieldName='password' openEdit={openEdit} closeInput={closeInput} open={open.password} Key='4' value={user.password} valueChange={valueChange} saveBtn={editProfile} />
 
         </div>
-
+        <ToastContainer />
 
 
       </div>

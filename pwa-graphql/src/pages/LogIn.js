@@ -48,8 +48,8 @@ export default function LogIn() {
           justify-around items-center">
 
         <div className="w-full mx-auto px-20 flex-col items-center space-y-6 select-none cursor-none">
-          <h1 className="text-white font-bold text-4xl font-sans">GraphQl-PWA</h1>
-          <p className="text-white mt-1 text-2xl capitalize font-thin font-mono">The Purpose of this Web App to Give a Complete Reference of uses graphql and Progressive web app</p>
+          <h1 className="text-white font-bold text-4xl font-sans text-center">GraphQl-PWA</h1>
+          <p className="text-white mt-1 text-2xl capitalize font-thin font-mono text-center">The Purpose of this Web App to Give a Complete Reference of uses graphql and Progressive web app</p>
 
         </div>
       </div>

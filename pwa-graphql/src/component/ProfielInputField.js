@@ -49,7 +49,7 @@ export default function InputField({inputLabel, inputType,fieldName,openEdit,clo
       <div className='flex mt-4 h-10 justify-between'>
         <div className='flex items-center border-1 py-2 px-3 rounded-lg bg-white w-1/2'>
           <input className="bg-transparent outline-none pl-2 w-full mr-2.5 rounded border-none" type={inputType != 'password' ? inputType : (passwordVisible ? 'text': 'password')} name={fieldName} id="first-name"
-                 placeholder={inputLabel} onChange={handleInputChange} value={value}/>
+                 placeholder={inputLabel} onChange={handleInputChange} value={value == "Set Name" || value == "Set Mobile Number" ? "" : value}/>
           {inputType == 'password' &&
           <div>
             {!passwordVisible ? <svg className="h-5 w-5 fill-gray-400" onClick={PasswordIndicator}
