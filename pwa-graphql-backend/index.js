@@ -14,7 +14,7 @@ const server = new ApolloServer({
     let user ;
       // console.log('user',token)
     if(token){
-      user = await jwt.verify(token, "@1@Viral@1@");
+      user = await jwt.verify(token, "@1@viral@1@");
     }
     return {user};
   },

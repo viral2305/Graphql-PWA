@@ -31,7 +31,7 @@ const AdminSchema = new mongoose.Schema({
   },
   token: {
     type: String,
-    required: true
+    required: false
   },
   name: {
     type: String,

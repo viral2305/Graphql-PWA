@@ -15,7 +15,7 @@ const resolvers ={
     },
     user: async (_,{},context) => {
       if (!context.user) throw new AuthenticationError('you must be logged in');
-      const userProfile = await context.dataSources.Admin.findOne({email:context.user})
+      const userProfile = await context.dataSources.Admin.findOne({_id: context.user})
       return userProfile
     }
   },
@@ -23,15 +23,23 @@ const resolvers ={
   Mutation: {
     CreateUser: async  (_,{newData},context) => {
       const user = await context.dataSources.Admin.findOne({email: newData.email});
-      console.log('user',user)
+      // console.log('user',user)
       if (user) {
         throw new Error("This UserEmail is already exists.")
       }else {
         const newAdmin = new context.dataSources.Admin({
-          ...newData, token: await jwt.sign(newData.email, '@1@Viral@1@')
+          ...newData,
         });
-        newAdmin.save();
-        return newAdmin;
+        var newUserRsp = []
+        await newAdmin.save().then(async  (result) => {
+          const newUser = await context.dataSources.Admin.find({$and:[{email: result.email},{password: result.password}]})
+          const token = await jwt.sign((newUser[0]._id).toString(), "@1@viral@1@")
+          const updateUser = await context.dataSources.Admin.findOneAndUpdate({email: newUser[0].email },{token: token},{
+            new: true
+          })
+          newUserRsp.push(updateUser)
+        });
+        return newUserRsp[0]
       }
     },
     LoginUser: async (_,{newData},context) => {
@@ -44,7 +52,7 @@ const resolvers ={
       }
     },
     UpdateUser: async (_,{newData},context) => {
-      const newuser = await context.dataSources.Admin.findOneAndUpdate({email: context.user },{...newData},{
+      const newuser = await context.dataSources.Admin.findOneAndUpdate({_id: context.user },{...newData},{
         new: true
       })
       return newuser
