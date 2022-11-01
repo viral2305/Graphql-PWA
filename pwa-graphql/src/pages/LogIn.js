@@ -1,14 +1,14 @@
 import React, {useState} from "react";
 import {Link, useNavigate} from "react-router-dom";
-import {useMutation} from "@apollo/client";
 import {LOGIN_USER} from "../Graph-ql/mutation";
+import {fetchGraphQlApi} from "../Graph-ql/api";
 
 
 export default function LogIn() {
   const [userData,setUserData] = useState({email: '', password: ''});
   const [passwordVisible, setPasswordVisible] = useState(false);
   const [errorFlag,setErrorFlag] = useState('');
-  const [Login,{loading,error,data}] = useMutation(LOGIN_USER)
+  // const [Login,{loading,error,data}] = useMutation(LOGIN_USER)
   const navigate = useNavigate();
 
 
@@ -28,14 +28,21 @@ export default function LogIn() {
       setErrorFlag('*Password Field is Required!')
     }else{
       setErrorFlag('');
-      await Login({variables : {newData: userData}}).then((res) => {
+      await fetchGraphQlApi(LOGIN_USER,{newData: userData}).then(res => res.json()).then((res) => {
         localStorage.setItem("token",res.data.LoginUser.token)
         navigate('/')
-        console.log("res",res)
       }).catch((error) => {
         console.log('error',error.message)
         setErrorFlag(error.message)
       })
+      // await Login({variables : {newData: userData}}).then((res) => {
+      //   localStorage.setItem("token",res.data.LoginUser.token)
+      //   navigate('/')
+      //   console.log("res",res)
+      // }).catch((error) => {
+      //   console.log('error',error.message)
+      //   setErrorFlag(error.message)
+      // })
 
     }
   };
@@ -94,7 +101,7 @@ export default function LogIn() {
             </button>
             <div className="flex justify-between mt-4">
               <span
-                className="text-sm ml-2 hover:text-green-600 cursor-pointer hover:-translate-y-1 duration-500 transition-all">Forgot Password ?</span>
+                className="text-sm ml-2 hover:text-green-600 cursor-pointer hover:-translate-y-1 duration-500 transition-all" onClick={()=> navigate('/forgot-password')}>Forgot Password ?</span>
 
               <a href="#"
                  className="text-sm ml-2 hover:text-green-600 cursor-pointer hover:-translate-y-1 duration-500 transition-all"><Link to='/sign-in'>Don't

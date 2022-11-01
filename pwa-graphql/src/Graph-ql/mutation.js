@@ -10,8 +10,14 @@ mutation createUser($newData: CreateInput!){
   }
 }
 `
-
-export const LOGIN_USER = gql`
+export const FORGOT_PASSWORD = `
+mutation ForgotPassword($email: String!){
+  ForgotPassword(email: $email){
+    message
+  } 
+  }
+`
+export const LOGIN_USER = `
 mutation LoginUser($newData: CreateInput!){
   LoginUser(newData: $newData){
     id

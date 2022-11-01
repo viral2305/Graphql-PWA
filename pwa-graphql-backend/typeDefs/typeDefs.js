@@ -26,7 +26,11 @@ const typeDefs = gql`
     CreateUser(newData: CreateInput!): User
     LoginUser(newData: CreateInput!): User
     UpdateUser(newData: EditInput!): User
+    ForgotPassword(email: String!): Data
  }
+ type Data{
+     message:String
+ } 
   input CreateInput{
      email: String!
      password: String!

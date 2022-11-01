@@ -1,16 +1,25 @@
 import React, {useState} from "react";
-import {Link} from "react-router-dom";
+import {Link,useNavigate,useLocation} from "react-router-dom";
 
 export default function Navbar() {
   const [menuOpen,setMenuOpen] = useState(false)
+  const navigate = useNavigate()
+  const location = useLocation()
+  const menu = [
+    {name: 'Home',path:'/'},
+    {name: 'Profile',path:'/profile'},
+    {name: 'View',path:'/view'},
+    {name: 'LogOut',path:'/login'},
+  ]
 
-  const logOut = (key) => {
-    if(key === 2){
-    setMenuOpen(!menuOpen)
-    localStorage.clear()
-    }else{
-      localStorage.clear()
+  const handleClick = (path) => {
+    if(path === '/login'){
+      localStorage.removeItem('token')
     }
+    navigate(path)
+  }
+  const getPathName = () => {
+    return location.pathname
   }
   return(
     <>
@@ -18,10 +27,9 @@ export default function Navbar() {
       <p className='text-green-900 font-bold text-2xl md:text-3xl mx-6 ont-thin font-mono select-none cursor-pointer'><Link to='/'>GraphQl-PWA</Link></p>
       <div className='hidden md:flex flex-row h-14 items-center'>
         <ul className=' font-bold no-underline text-lg font-mono select-none flex flex-row text-green-800 items-center '>
-          <li className='list-item mx-5 px-2.5 py-2 cursor-pointer'><Link to='/'>Home</Link></li>
-          <li className='list-item mx-5 px-2.5 py-2 cursor-pointer'><Link to='/profile'>Profile</Link></li>
-          <li className='list-item mx-5 px-2.5 py-2 cursor-pointer'>View</li>
-          <li className=' logout-button mx-5 px-2.5 py-2 cursor-pointer' onClick={() => logOut(1)}><button><Link to='/login'>LogOut</Link></button></li>
+          {menu?.map((ele,index)=>(
+            <li key={index} className={`list-item mx-5 px-2.5 py-2 cursor-pointer ${getPathName() === ele?.path ? 'logout-button':''}`} onClick={()=> handleClick(ele?.path)}>{ele?.name}</li>
+          ))}
         </ul>
         <button className="rounded-3xl text-green-200 mx-5 shadow-none p-2 bg-green-800  text-lg rounded-full ring-1 ring-green-800 cursor-pointer">
           <svg
@@ -52,10 +60,9 @@ export default function Navbar() {
         <svg className=" w-8 h-8 sm:w-12 sm:h-12 absolute right-2 top-2 fill-green-800" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><path d="M310.6 361.4c12.5 12.5 12.5 32.75 0 45.25C304.4 412.9 296.2 416 288 416s-16.38-3.125-22.62-9.375L160 301.3L54.63 406.6C48.38 412.9 40.19 416 32 416S15.63 412.9 9.375 406.6c-12.5-12.5-12.5-32.75 0-45.25l105.4-105.4L9.375 150.6c-12.5-12.5-12.5-32.75 0-45.25s32.75-12.5 45.25 0L160 210.8l105.4-105.4c12.5-12.5 32.75-12.5 45.25 0s12.5 32.75 0 45.25l-105.4 105.4L310.6 361.4z"/></svg>
       </button>
       <ul className='no-underline text-lg font-sans flex flex-col text-green-800 items-center mt-5'>
-        <li className='list-item mx-5 my-1 px-2.5 py-2' onClick={() => setMenuOpen(!menuOpen)}><Link to='/'>Home</Link></li>
-        <li className='list-item mx-5 my-1 px-2.5 py-2' onClick={() => setMenuOpen(!menuOpen)}><Link to='/profile'>Profile</Link></li>
-        <li className='list-item mx-5 my-1 px-2.5 py-2' onClick={() => setMenuOpen(!menuOpen)}>View</li>
-        <li className=' logout-button mx-5 my-1 px-2.5 py-2' onClick={() => logOut(2)}><button><Link to='/login'>LogOut</Link></button></li>
+        {menu?.map((ele,index)=>(
+            <li key={index} className={`list-item mx-5 my-1 px-2.5 py-2 ${getPathName() === ele?.path ? 'logout-button':''}`} onClick={() => {setMenuOpen(!menuOpen); handleClick(ele?.path,)}}>{ele?.name}</li>
+        ))}
       </ul>
     </div>
   </>

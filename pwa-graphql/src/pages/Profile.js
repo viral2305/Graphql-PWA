@@ -1,26 +1,37 @@
-import React, {useRef, useState} from "react";
+import React, {useEffect, useRef, useState} from "react";
 import InputField from "../component/ProfielInputField";
 import {useMutation, useQuery} from "@apollo/client";
 import {EDIT_PROFILE} from "../Graph-ql/mutation";
 import {GET_USER_BY_TOKEN} from "../Graph-ql/queires";
 import {toast, ToastContainer} from "react-toastify";
 import 'react-toastify/dist/ReactToastify.css';
+import {fetchGraphQlApi} from "../Graph-ql/api";
 
 export default function Profile() {
   const [user, setUser] = useState({'name': 'Set Name','mobile': 'Set Mobile Number', 'email': '', 'password': ''});
   const [open, setOpen] = useState({'name': false,'mobile': false, 'email': false, 'password': false});
-  const {getProfile,loading,error,data} = useQuery(GET_USER_BY_TOKEN,{
-    context: {
-      headers: {
-        authorization: localStorage.getItem("token") || ""
-      }
-    },
-    onCompleted(data){
-      setUser({'name':data.user.name != '' && data.user.name != null ? data.user.name : 'Set Name','mobile': data.user.mobile != '' && data.user.mobile != null ? data.user.mobile : 'Set Mobile','email': data.user.email != '' && data.user.email != null ? data.user.email : 'Set Email','password': data.user.password != '' && data.user.password != null ? data.user.password : 'Set Password'})
-    }
-  })
+  // const {getProfile,loading,error,data} = useQuery(GET_USER_BY_TOKEN,{
+  //   context: {
+  //     headers: {
+  //       authorization: localStorage.getItem("token") || ""
+  //     }
+  //   },
+  //   onCompleted(data){
+  //     setUser({'name':data.user.name != '' && data.user.name != null ? data.user.name : 'Set Name','mobile': data.user.mobile != '' && data.user.mobile != null ? data.user.mobile : 'Set Mobile','email': data.user.email != '' && data.user.email != null ? data.user.email : 'Set Email','password': data.user.password != '' && data.user.password != null ? data.user.password : 'Set Password'})
+  //   }
+  // })
   const [updateUser,{updateLoading,updateError,updateData}] = useMutation(EDIT_PROFILE)
-
+  const getProfile = async () => {
+     await fetchGraphQlApi(GET_USER_BY_TOKEN,{}).then(res => res.json()).then(res => {
+       if(res && res.data && res.data.user){
+         let {name,mobile,email,password} = res.data.user
+         setUser({'name':name !== '' && name != null ? name : 'Set Name','mobile': mobile !== '' && mobile !== null ? mobile : 'Set Mobile','email': email !== '' && email !== null ? email : 'Set Email','password': 'Set Password'})
+       }
+    })
+  }
+  useEffect(()=> {
+    getProfile()
+  },[])
   const openEdit = (key) => {
     if(key == 1){
       setOpen({'name': true,'mobile': false, 'email': false, 'password': false})
